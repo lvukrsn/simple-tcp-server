@@ -38,7 +38,6 @@ int main() {
         return 1;
     }
     char buffer[1024];
-    int byteReceived = recv(clientSocket, buffer, sizeof(buffer), 0);
     while (true) {
 		int byteReceived = recv(clientSocket, buffer, sizeof(buffer), 0);
         if (byteReceived == SOCKET_ERROR) {
@@ -51,7 +50,6 @@ int main() {
         }
 		cout << "received: " << buffer << endl;
     }
-    cout << "client connected!" << endl;
     cout << "\n\n\n socket works good, grats!\n" << endl;
 	closesocket(clientSocket);closesocket(serverSocket);WSACleanup();
     return 0;
