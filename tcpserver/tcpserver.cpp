@@ -48,6 +48,7 @@ int main() {
 			cout << "client disconnected" << endl;
 			break;
         }
+        buffer[byteReceived] = '\0';
 		cout << "received: " << buffer << endl;
     }
     cout << "\n\n\n socket works good, grats!\n" << endl;
