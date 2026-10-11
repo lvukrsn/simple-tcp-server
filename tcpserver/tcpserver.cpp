@@ -39,15 +39,18 @@ int main() {
     }
     char buffer[1024];
     int byteReceived = recv(clientSocket, buffer, sizeof(buffer), 0);
-    if (byteReceived == SOCKET_ERROR) {
-        cout << "err recv data, the error is " << WSAGetLastError() << endl;
-        closesocket(clientSocket);
-        closesocket(serverSocket);
-        WSACleanup();
-        return 1;
+    while (true) {
+		int byteReceived = recv(clientSocket, buffer, sizeof(buffer), 0);
+        if (byteReceived == SOCKET_ERROR) {
+            cout << "err recv" << WSAGetLastError() << endl;
+            break;
+        }
+        if (byteReceived == 0) {
+			cout << "client disconnected" << endl;
+			break;
+        }
+		cout << "received: " << buffer << endl;
     }
-    else if (buffer == 0) { cout << "client disconnected" << endl;}
-    else { buffer[byteReceived] = '\0';cout << "received: "<< buffer << endl; }
     cout << "client connected!" << endl;
     cout << "\n\n\n socket works good, grats!\n" << endl;
 	closesocket(clientSocket);closesocket(serverSocket);WSACleanup();
