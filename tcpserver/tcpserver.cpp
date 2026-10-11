@@ -5,13 +5,12 @@
 using namespace std;
 
 int main() {
-	cout << "waiting for client...\n" << endl;
     WSADATA wsaData;
-    WSAStartup(MAKEWORD(    2, 2), &wsaData);
     SOCKET serverSocket;
-    serverSocket = socket(AF_INET, SOCK_STREAM, 0);
-    if (WSAStartup(MAKEWORD(2, 2), &wsaData ) != 0){cout<< "err create socket" << endl;
+    if (WSAStartup(MAKEWORD(2, 2), &wsaData) != 0) {
+        cout << "err create socket" << endl;
     }
+    serverSocket = socket(AF_INET, SOCK_STREAM, 0);
     if (serverSocket == INVALID_SOCKET) { cout << "socket create fail" << endl; WSACleanup();return 1;}
     sockaddr_in serverAddr;
     serverAddr.sin_family = AF_INET;
@@ -29,6 +28,7 @@ int main() {
         WSACleanup();
         return 1;
     }
+    cout << "waiting for client...\n" << endl;
     SOCKET clientSocket;
     clientSocket = accept(serverSocket, nullptr ,nullptr);
     if (clientSocket == INVALID_SOCKET) {
@@ -37,8 +37,19 @@ int main() {
 		WSACleanup();
         return 1;
     }
+    char buffer[1024];
+    int byteReceived = recv(clientSocket, buffer, sizeof(buffer), 0);
+    if (byteReceived == SOCKET_ERROR) {
+        cout << "err recv data, the error is " << WSAGetLastError() << endl;
+        closesocket(clientSocket);
+        closesocket(serverSocket);
+        WSACleanup();
+        return 1;
+    }
+    else if (buffer == 0) { cout << "client disconnected" << endl;}
+    else { buffer[byteReceived] = '\0';cout << "received: "<< buffer << endl; }
     cout << "client connected!" << endl;
     cout << "\n\n\n socket works good, grats!\n" << endl;
-    closesocket(serverSocket); WSACleanup();
+	closesocket(clientSocket);closesocket(serverSocket);WSACleanup();
     return 0;
 }
