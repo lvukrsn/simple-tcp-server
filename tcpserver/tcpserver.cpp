@@ -5,6 +5,7 @@
 using namespace std;
 
 int main() {
+	cout << "waiting for client...\n" << endl;
     WSADATA wsaData;
     WSAStartup(MAKEWORD(    2, 2), &wsaData);
     SOCKET serverSocket;
@@ -28,9 +29,16 @@ int main() {
         WSACleanup();
         return 1;
     }
-    cout << "bind success!" << endl;
+    SOCKET clientSocket;
+    clientSocket = accept(serverSocket, nullptr ,nullptr);
+    if (clientSocket == INVALID_SOCKET) {
+        cout << "err socket accept" << endl;
+		closesocket(serverSocket);
+		WSACleanup();
+        return 1;
+    }
+    cout << "client connected!" << endl;
     cout << "\n\n\n socket works good, grats!\n" << endl;
-    cout << "press any key to exit";cin.get();
     closesocket(serverSocket); WSACleanup();
     return 0;
 }
