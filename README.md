@@ -1,2 +1,4 @@
 # simple-tcp-server
-простой tcp сервер для обмена файлами
+Simple tcp server
+Create serversocket -> clientsocket -> chating (in progress)
+Stack - C++, Visual Studio (or analog), Python 3.15+
