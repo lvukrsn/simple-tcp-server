@@ -37,8 +37,8 @@ int main() {
         char buffer[1024];
         SOCKET clientSocket;
         clientSocket = accept(serverSocket, nullptr, nullptr);
-        if (clientSocket == SOCKET_ERROR) {
-			std::cout << "err accept socket" << WSAGetLastError() << std::endl;
+        if (clientSocket == INVALID_SOCKET) {
+            std::cout << "err accept socket" << WSAGetLastError() << std::endl; break;
         }
         while (true) {
             int byteReceived = recv(clientSocket, buffer, sizeof(buffer), 0);
@@ -54,14 +54,9 @@ int main() {
             int sendResult = send(clientSocket, buffer, byteReceived, 0);
             if (sendResult == SOCKET_ERROR) {
                 std::cout << "err send" << WSAGetLastError() << std::endl;
-                closesocket(clientSocket);
-                closesocket(serverSocket);
-                WSACleanup();
                 break;
             }
             std::cout << "received: " << buffer << std::endl;
-
-            if (clientSocket == INVALID_SOCKET) { return 1; }
         }
         closesocket(clientSocket);
     }
